@@ -20,17 +20,14 @@
 var ReactNative = Object.assign(Object.create(require('React')), {
   // Components
   ActivityIndicatorIOS: require('ActivityIndicatorIOS'),
-  DatePickerIOS: require('DatePickerIOS'),
   DrawerLayoutAndroid: require('DrawerLayoutAndroid'),
   Image: require('Image'),
   ListView: require('ListView'),
-  MapView: require('MapView'),
   Modal: require('Modal'),
   Navigator: require('Navigator'),
   NavigatorIOS: require('NavigatorIOS'),
   PickerIOS: require('PickerIOS'),
   ProgressBarAndroid: require('ProgressBarAndroid'),
-  ProgressViewIOS: require('ProgressViewIOS'),
   ScrollView: require('ScrollView'),
   SegmentedControlIOS: require('SegmentedControlIOS'),
   SliderIOS: require('SliderIOS'),
@@ -46,10 +43,8 @@ var ReactNative = Object.assign(Object.create(require('React')), {
   TouchableOpacity: require('TouchableOpacity'),
   TouchableWithoutFeedback: require('TouchableWithoutFeedback'),
   View: require('View'),
-  WebView: require('WebView'),
 
   // APIs
-  ActionSheetIOS: require('ActionSheetIOS'),
   AdSupportIOS: require('AdSupportIOS'),
   AlertIOS: require('AlertIOS'),
   Animated: require('Animated'),
