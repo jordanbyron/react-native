@@ -65,8 +65,6 @@ typedef NSURL RCTFileURL;
 + (UIReturnKeyType)UIReturnKeyType:(id)json;
 
 + (UIViewContentMode)UIViewContentMode:(id)json;
-+ (UIBarStyle)UIBarStyle:(id)json;
-
 + (CGFloat)CGFloat:(id)json;
 + (CGPoint)CGPoint:(id)json;
 + (CGSize)CGSize:(id)json;

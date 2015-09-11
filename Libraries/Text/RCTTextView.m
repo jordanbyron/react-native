@@ -35,7 +35,6 @@
 
     _textView = [[UITextView alloc] initWithFrame:self.bounds];
     _textView.backgroundColor = [UIColor clearColor];
-    _textView.scrollsToTop = NO;
     _textView.delegate = self;
     [self addSubview:_textView];
   }

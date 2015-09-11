@@ -155,18 +155,7 @@ NSInteger kNeverProgressed = -10000;
  */
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
 {
-  if (self.interactivePopGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-    if (self.navigationLock == RCTNavigationLockNone) {
-      self.navigationLock = RCTNavigationLockNative;
-      if (_scrollCallback) {
-        _scrollCallback();
-      }
-    } else if (self.navigationLock == RCTNavigationLockJavaScript) {
-      // This should never happen because we disable/enable the gesture
-      // recognizer when we lock the navigation.
-      RCTAssert(NO, @"Should never receive gesture start while JS locks navigator");
-    }
-  } else {
+
     if (self.navigationLock == RCTNavigationLockNone) {
       // Must be coming from native interaction, lock it - it will be unlocked
       // in `didMoveToNavigationController`
@@ -185,7 +174,6 @@ NSInteger kNeverProgressed = -10000;
       // length (`currentReactCount` - 1).
       return [super navigationBar:navigationBar shouldPopItem:item];
     }
-  }
   return [super navigationBar:navigationBar shouldPopItem:item];
 }
 
@@ -371,7 +359,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 {
   if (_navigationController.navigationLock == RCTNavigationLockNone) {
     _navigationController.navigationLock = RCTNavigationLockJavaScript;
-    _navigationController.interactivePopGestureRecognizer.enabled = NO;
     return YES;
   }
   return NO;
@@ -380,7 +367,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)freeLock
 {
   _navigationController.navigationLock = RCTNavigationLockNone;
-  _navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 /**

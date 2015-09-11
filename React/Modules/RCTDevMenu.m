@@ -68,7 +68,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 @end
 
-@interface RCTDevMenu () <RCTBridgeModule, UIActionSheetDelegate>
+@interface RCTDevMenu () <RCTBridgeModule> //, UIActionSheetDelegate
 
 @property (nonatomic, strong) Class executorClass;
 
@@ -76,7 +76,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 @implementation RCTDevMenu
 {
-  UIActionSheet *_actionSheet;
+  //UIActionSheet *_actionSheet;
   NSUserDefaults *_defaults;
   NSMutableDictionary *_settings;
   NSURLSessionDataTask *_updateTask;
@@ -226,7 +226,7 @@ RCT_EXPORT_MODULE()
 - (void)dealloc
 {
   [_updateTask cancel];
-  [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
+//  [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -254,12 +254,12 @@ RCT_EXPORT_MODULE()
 
 - (void)toggle
 {
-  if (_actionSheet) {
-    [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
-    _actionSheet = nil;
-  } else {
-    [self show];
-  }
+//  if (_actionSheet) {
+//    [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
+//    _actionSheet = nil;
+//  } else {
+//    [self show];
+//  }
 }
 
 - (void)addItem:(NSString *)title handler:(dispatch_block_t)handler
@@ -278,11 +278,11 @@ RCT_EXPORT_MODULE()
   Class chromeExecutorClass = NSClassFromString(@"RCTWebSocketExecutor");
   if (!chromeExecutorClass) {
     [items addObject:[[RCTDevMenuItem alloc] initWithTitle:@"Chrome Debugger Unavailable" handler:^{
-      [[[UIAlertView alloc] initWithTitle:@"Chrome Debugger Unavailable"
-                                  message:@"You need to include the RCTWebSocket library to enable Chrome debugging"
-                                 delegate:nil
-                        cancelButtonTitle:@"OK"
-                        otherButtonTitles:nil] show];
+//      [[[UIAlertView alloc] initWithTitle:@"Chrome Debugger Unavailable"
+//                                  message:@"You need to include the RCTWebSocket library to enable Chrome debugging"
+//                                 delegate:nil
+//                        cancelButtonTitle:@"OK"
+//                        otherButtonTitles:nil] show];
     }]];
   } else {
     BOOL isDebuggingInChrome = _executorClass && _executorClass == chromeExecutorClass;
@@ -327,39 +327,39 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(show)
 {
-  if (_actionSheet || !_bridge) {
-    return;
-  }
-
-  UIActionSheet *actionSheet = [UIActionSheet new];
-  actionSheet.title = @"React Native: Development";
-  actionSheet.delegate = self;
-
-  NSArray *items = [self menuItems];
-  for (RCTDevMenuItem *item in items) {
-    [actionSheet addButtonWithTitle:item.title];
-  }
-
-  [actionSheet addButtonWithTitle:@"Cancel"];
-  actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-
-  actionSheet.actionSheetStyle = UIBarStyleBlack;
-  [actionSheet showInView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
-  _actionSheet = actionSheet;
-  _presentedItems = items;
+//  if (_actionSheet || !_bridge) {
+//    return;
+//  }
+//
+//  UIActionSheet *actionSheet = [UIActionSheet new];
+//  actionSheet.title = @"React Native: Development";
+//  actionSheet.delegate = self;
+//
+//  NSArray *items = [self menuItems];
+//  for (RCTDevMenuItem *item in items) {
+//    [actionSheet addButtonWithTitle:item.title];
+//  }
+//
+//  [actionSheet addButtonWithTitle:@"Cancel"];
+//  actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
+//
+//  actionSheet.actionSheetStyle = UIBarStyleBlack;
+//  [actionSheet showInView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
+//  _actionSheet = actionSheet;
+//  _presentedItems = items;
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-  _actionSheet = nil;
-  if (buttonIndex == actionSheet.cancelButtonIndex) {
-    return;
-  }
-
-  RCTDevMenuItem *item = _presentedItems[buttonIndex];
-  item.handler();
-  return;
-}
+//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//  _actionSheet = nil;
+//  if (buttonIndex == actionSheet.cancelButtonIndex) {
+//    return;
+//  }
+//
+//  RCTDevMenuItem *item = _presentedItems[buttonIndex];
+//  item.handler();
+//  return;
+//}
 
 RCT_EXPORT_METHOD(reload)
 {

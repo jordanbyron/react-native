@@ -272,6 +272,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RCTImage;
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -293,6 +294,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RCTImage;
 				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
