@@ -68,7 +68,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 @end
 
-@interface RCTDevMenu () <RCTBridgeModule> //, UIActionSheetDelegate
+@interface RCTDevMenu () <RCTBridgeModule>
 
 @property (nonatomic, strong) Class executorClass;
 
@@ -76,7 +76,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 @implementation RCTDevMenu
 {
-  //UIActionSheet *_actionSheet;
+  UIAlertController *_alertController;
   NSUserDefaults *_defaults;
   NSMutableDictionary *_settings;
   NSURLSessionDataTask *_updateTask;
@@ -226,7 +226,7 @@ RCT_EXPORT_MODULE()
 - (void)dealloc
 {
   [_updateTask cancel];
-//  [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
+  [_alertController dismissViewControllerAnimated:YES completion:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -254,12 +254,12 @@ RCT_EXPORT_MODULE()
 
 - (void)toggle
 {
-//  if (_actionSheet) {
-//    [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
-//    _actionSheet = nil;
-//  } else {
-//    [self show];
-//  }
+  if (_alertController) {
+    [_alertController dismissViewControllerAnimated:YES completion:nil];
+    _alertController = nil;
+  } else {
+    [self show];
+  }
 }
 
 - (void)addItem:(NSString *)title handler:(dispatch_block_t)handler
@@ -327,39 +327,28 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(show)
 {
-//  if (_actionSheet || !_bridge) {
-//    return;
-//  }
-//
-//  UIActionSheet *actionSheet = [UIActionSheet new];
-//  actionSheet.title = @"React Native: Development";
-//  actionSheet.delegate = self;
-//
-//  NSArray *items = [self menuItems];
-//  for (RCTDevMenuItem *item in items) {
-//    [actionSheet addButtonWithTitle:item.title];
-//  }
-//
-//  [actionSheet addButtonWithTitle:@"Cancel"];
-//  actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
-//
-//  actionSheet.actionSheetStyle = UIBarStyleBlack;
-//  [actionSheet showInView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
-//  _actionSheet = actionSheet;
-//  _presentedItems = items;
-}
+  if (_alertController || !_bridge) {
+    return;
+  }
 
-//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//  _actionSheet = nil;
-//  if (buttonIndex == actionSheet.cancelButtonIndex) {
-//    return;
-//  }
-//
-//  RCTDevMenuItem *item = _presentedItems[buttonIndex];
-//  item.handler();
-//  return;
-//}
+  UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"React Native: Development" message: nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+  NSArray *items = [self menuItems];
+  for (RCTDevMenuItem *item in items) {
+    UIAlertAction* action = [UIAlertAction actionWithTitle:item.title style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction * action) { item.handler(); }];
+    [alertController addAction:action];
+  }
+
+  UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * action) { [self toggle];}];
+  
+  [alertController addAction:cancelAction];
+
+  [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+  _alertController = alertController;
+  _presentedItems = items;
+}
 
 RCT_EXPORT_METHOD(reload)
 {
